@@ -1,0 +1,8 @@
+[loglicense]
+allow =
+    MIT,
+
+ban =
+    AGPL,
+
+coverage = 100

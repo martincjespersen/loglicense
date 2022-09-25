@@ -17,7 +17,9 @@ Changelog = "https://github.com/martincjespersen/loglicense/releases"
 
 [tool.poetry.dependencies]
 python = "^3.7"
-click = ">=8.0.1"
+pathlib = "^1.0.1"
+tabulate = "^0.8.10"
+typer = "^0.6.1"
 
 [tool.poetry.dev-dependencies]
 Pygments = ">=2.10.0"
@@ -46,10 +48,10 @@ xdoctest = {extras = ["colors"], version = ">=0.15.10"}
 myst-parser = {version = ">=0.16.1"}
 
 [tool.poetry.scripts]
-loglicense = "loglicense.__main__:main"
+loglicense = "loglicense.__main__:app"
 
 [tool.coverage.paths]
-source = ["src", "*/site-packages"]
+source = ["loglicense", "*/site-packages"]
 tests = ["tests", "*/tests"]
 
 [tool.coverage.run]
