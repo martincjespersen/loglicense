@@ -13,7 +13,7 @@ from loglicense import LicenseLogger
 
 
 app = typer.Typer()
-OK, ERR, FAIL_UNDER = 0, 1, 2
+OK, ERR, FAIL_UNDER = typer.Exit(code=0), typer.Exit(code=1), typer.Exit(code=2)
 
 
 @app.command()
@@ -63,7 +63,7 @@ def check(
     package_manager: str = "pypi",
     develop: bool = False,
     show_report: bool = True,
-) -> int:
+):
     """Check licenses of packages in dependency file.
 
     Args:
@@ -74,8 +74,10 @@ def check(
         develop: Whether to include development dependencies
         show_report: Print information regarding licences checked
 
-    Returns:
-        int: finish code
+    Raises:
+        OK: finish code
+        ERR: finish code
+        FAIL_UNDER: finish code
     """
     config = configparser.ConfigParser()
     config.read(config_file)
@@ -102,7 +104,7 @@ def check(
     result_status = [x[-1] for x in results[1:]]
 
     if any([x == "Banned" for x in result_status]):
-        return ERR
+        raise ERR
 
     try:
         license_coverage = int(
@@ -118,9 +120,9 @@ def check(
             f"and actual coverage: {license_coverage}%"
         )
         if license_coverage < target_cov:
-            return ERR
+            raise FAIL_UNDER
 
-    return OK
+    raise OK
 
 
 def validate_requirements(

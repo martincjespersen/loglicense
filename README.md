@@ -37,6 +37,12 @@ You can install _Log License_ via [pip] from [PyPI]:
 $ pip install loglicense
 ```
 
+or using [Poetry]
+
+```console
+$ poetry add loglicense
+```
+
 ## Usage
 
 Please see the [Command-line Reference] for details.
@@ -65,6 +71,12 @@ This project was generated from [@cjolowicz]'s [Hypermodern Python Cookiecutter]
 [hypermodern python cookiecutter]: https://github.com/cjolowicz/cookiecutter-hypermodern-python
 [file an issue]: https://github.com/martincjespersen/loglicense/issues
 [pip]: https://pip.pypa.io/
+
+This project is greatly inspired by [dep-license] created by [Abdulelah Bin Mahfoodh].
+
+[dep-license]: https://github.com/abduhbm/dep-license
+[abdulelah bin mahfoodh]: https://github.com/abduhbm
+[poetry]: https://python-poetry.org/
 
 <!-- github-only -->
 

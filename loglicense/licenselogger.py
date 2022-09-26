@@ -52,8 +52,13 @@ class LicenseLogger:
 
     def log_licenses(
         self,
-    ):
-        """Fetches license package metadata for the given dependency file."""
+    ) -> List[List[str]]:
+        """Fetches license package metadata for the given dependency file.
+
+        Returns:
+            List[List[str]]: Metadata from licenses found in dependency
+            file.
+        """
         self.licenselog_ = [self.info_columns]
 
         for libname in self.parser(self.dependency_file, **self._parser_args):
@@ -61,8 +66,11 @@ class LicenseLogger:
             lib_metadata = []
             if not pkg_metadata:
                 lib_metadata.append(libname)
-            for col in self.info_columns:
-                if pkg_metadata:
+                lib_metadata.extend(
+                    ["Not found" for x in range(len(self.info_columns) - 1)]
+                )
+            else:
+                for col in self.info_columns:
                     licenses = pkg_metadata.get(col, "")
 
                     if not licenses:
@@ -79,8 +87,6 @@ class LicenseLogger:
                         licenses = "\n".join(licenses)
 
                     lib_metadata.append(licenses)
-                else:
-                    lib_metadata.append("Not found")
 
             self.licenselog_.append(lib_metadata)
 
