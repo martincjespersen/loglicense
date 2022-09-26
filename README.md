@@ -1,6 +1,7 @@
 # Log License
 
 [![PyPI](https://img.shields.io/pypi/v/loglicense.svg)][pypi_]
+![Downloads](https://img.shields.io/pypi/dm/loglicense)
 [![Status](https://img.shields.io/pypi/status/loglicense.svg)][status]
 [![Python Version](https://img.shields.io/pypi/pyversions/loglicense)][python version]
 [![License](https://img.shields.io/pypi/l/loglicense)][license]
@@ -23,11 +24,15 @@
 
 ## Features
 
-- TODO
+- Report and save log of licenses included in project
 
-## Requirements
+### Supported dependency files
 
-- TODO
+- poetry.lock
+
+### Supported package managers
+
+- pypi
 
 ## Installation
 
@@ -43,9 +48,34 @@ or using [Poetry]
 $ poetry add loglicense
 ```
 
-## Usage
+## Quick example
 
 Please see the [Command-line Reference] for details.
+
+```console
+$ loglicense report path_to/poetry.lock
+```
+
+Example output of this project's poetry.lock file:
+
+```console
+| name               | license                            |
+|:-------------------|:-----------------------------------|
+| click              | BSD-3-Clause                       |
+| colorama           | BSD                                |
+| importlib-metadata | Apache Software License            |
+| pathlib            | MIT License                        |
+| tabulate           | MIT                                |
+| toml               | MIT                                |
+| typer              | MIT License                        |
+| typing-extensions  | Python Software Foundation License |
+| zipp               | MIT License                        |
+```
+
+## Features to implement
+
+- Support npmjs package manager (and package.json/package-lock.json)
+- Support Pipfile, pyproject.toml, Pipfile.lock, requirements.txt
 
 ## Contributing
 
