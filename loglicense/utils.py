@@ -1,3 +1,4 @@
+"""Utility functions for loglicense module."""
 from pathlib import Path
 from typing import List
 from typing import Set
@@ -6,7 +7,7 @@ import toml
 
 
 class DependencyFileParser:
-    """Main module for DependencyFileParser"""
+    """Main module for DependencyFileParser."""
 
     def __init__(self):
         super().__init__()
@@ -25,9 +26,8 @@ class DependencyFileParser:
             attribute: Name of the parser function
 
         Returns:
-            dependency_filename: Filename of the dependency file
+            str: Filename of the dependency file
         """
-
         dependency_filename = attribute.replace(self.method_prefix, "").replace(
             "_", "."
         )
@@ -35,14 +35,14 @@ class DependencyFileParser:
 
     @staticmethod
     def parse_poetry_lock(license_file: Path, develop: bool = False) -> List[str]:
-        """Main module for DependencyFileParser
+        """Main module for DependencyFileParser.
 
         Args:
             license_file: Path to license file (poetry.lock)
             develop: Whether to include development dependencies
 
         Returns:
-            output: List of the names of python depedencies in lock file
+            List[str]: List of the names of python depedencies in lock file
         """
         output: List[str] = []
         included_categories: Set[str] = {"main"}
@@ -50,8 +50,8 @@ class DependencyFileParser:
         if develop:
             included_categories.add("dev")
 
-        cf = toml.load(license_file)
-        for pkg in cf.get("package", []):
+        license_file = toml.load(license_file)
+        for pkg in license_file.get("package", []):
             if pkg["category"] in included_categories:
                 output.append(pkg.get("name", ""))
         return output

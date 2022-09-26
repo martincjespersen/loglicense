@@ -1,4 +1,4 @@
-"""Main module."""
+"""LogLicence main module."""
 import json
 import logging
 from pathlib import Path
@@ -7,7 +7,6 @@ from typing import List
 from typing import Optional
 from urllib.request import urlopen
 
-# from loglicense import DependencyFileParser
 from loglicense.utils import DependencyFileParser
 
 
@@ -54,15 +53,14 @@ class LicenseLogger:
     def log_licenses(
         self,
     ):
-        """Fetches license information from package manger for the
-        given dependency file
-        """
-
+        """Fetches license package metadata for the given dependency file."""
         self.licenselog_ = [self.info_columns]
 
         for libname in self.parser(self.dependency_file, **self._parser_args):
             pkg_metadata = self.get_license_metadata(libname)
             lib_metadata = []
+            if not pkg_metadata:
+                lib_metadata.append(libname)
             for col in self.info_columns:
                 if pkg_metadata:
                     licenses = pkg_metadata.get(col, "")
@@ -89,12 +87,12 @@ class LicenseLogger:
         return self.licenselog_
 
     def get_license_metadata(self, libname: str) -> Any:
-        """Fetch information from package manager site
+        """Fetch information from package manager site.
 
         Args:
             libname: Name of the package to fetch information regarding
         Returns:
-            output: The metadata of the library
+            Any: The metadata of the library
         """
         lib_url = self.library_url.replace("XXX", libname)
         try:
@@ -103,7 +101,6 @@ class LicenseLogger:
 
                 if self.package_manager == "pypi":
                     output = output.get("info", {})
-
             return output
 
         except Exception:
@@ -111,6 +108,11 @@ class LicenseLogger:
             return None
 
     def is_logged(self) -> bool:
+        """Check if logged.
+
+        Returns:
+            bool: Whether logged or not
+        """
         logged = [
             v for v in getattr(self) if v.endswith("_") and not v.startswith("__")
         ]
