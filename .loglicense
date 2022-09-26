@@ -5,5 +5,4 @@ allow =
     BSD
 ban =
     AGPL,
-
 coverage = 100

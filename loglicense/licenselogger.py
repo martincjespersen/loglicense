@@ -91,6 +91,7 @@ class LicenseLogger:
 
         Args:
             libname: Name of the package to fetch information regarding
+
         Returns:
             Any: The metadata of the library
         """
@@ -113,8 +114,6 @@ class LicenseLogger:
         Returns:
             bool: Whether logged or not
         """
-        logged = [
-            v for v in getattr(self) if v.endswith("_") and not v.startswith("__")
-        ]
+        logged = [v for v in dir(self) if v.endswith("_") and not v.startswith("__")]
 
         return bool(len(logged))

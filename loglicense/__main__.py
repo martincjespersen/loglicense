@@ -73,6 +73,9 @@ def check(
             Defaults to pypi for python.
         develop: Whether to include development dependencies
         show_report: Print information regarding licences checked
+
+    Returns:
+        int: finish code
     """
     config = configparser.ConfigParser()
     config.read(config_file)
@@ -129,6 +132,7 @@ def validate_requirements(
         license_logger: File to crawl dependencies for
         allowed: Whether to include development dependencies
         banned: Print information regarding licences checked
+
     Returns:
         List[List[str]]: Returns results of validation of license
     """
