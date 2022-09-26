@@ -1,7 +1,8 @@
 [loglicense]
 allow =
     MIT,
-
+    BSD-3-Clause,
+    BSD
 ban =
     AGPL,
 

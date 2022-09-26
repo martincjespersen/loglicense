@@ -4,9 +4,11 @@ import logging
 from pathlib import Path
 from typing import Any
 from typing import List
+from typing import Optional
 from urllib.request import urlopen
 
-from loglicense import DependencyFileParser
+# from loglicense import DependencyFileParser
+from loglicense.utils import DependencyFileParser
 
 
 logger = logging.getLogger("licenselogger")
@@ -20,6 +22,7 @@ class LicenseLogger:
         package_manager: Which type of package manager to evaluate.
             Defaults to pypi for python.
         info_columns: Information to include in table to log
+        develop: Whether to include development dependencies
 
     """
 
@@ -28,11 +31,13 @@ class LicenseLogger:
         dependency_file: str,
         package_manager: str = "pypi",
         info_columns: Optional[List[str]] = None,
+        develop: bool = False,
     ):
         super().__init__()
         self.dependency_file = Path(dependency_file)
         self.package_manager = package_manager
         self.info_columns = info_columns if info_columns else ["name", "license"]
+        self._parser_args = {"develop": develop}
 
         if not self.dependency_file.is_file():
             raise ValueError("Path must be a file")
@@ -55,14 +60,15 @@ class LicenseLogger:
 
         self.licenselog_ = [self.info_columns]
 
-        for libname in self.parser(self.dependency_file):
+        for libname in self.parser(self.dependency_file, **self._parser_args):
             pkg_metadata = self.get_license_metadata(libname)
             lib_metadata = []
-
             for col in self.info_columns:
                 if pkg_metadata:
-
                     licenses = pkg_metadata.get(col, "")
+
+                    if not licenses:
+                        licenses = ""
                     if col == "license" and licenses.strip() == "":
                         classifiers = pkg_metadata.get("classifiers", "")
                         licenses = [
