@@ -9,7 +9,7 @@ from loglicense.__main__ import app
 runner = CliRunner()
 
 
-def test_app_report(tmp_path: Path):
+def test_app_report(tmp_path: Path) -> None:
     """Test of dependency file parser.
 
     Args:
@@ -56,7 +56,7 @@ def test_app_report(tmp_path: Path):
     assert output in result.stdout
 
 
-def test_app_check_ok(tmp_path: Path):
+def test_app_check_ok(tmp_path: Path) -> None:
     """Test of dependency file parser.
 
     Args:
@@ -106,7 +106,7 @@ ban =
     assert result.exit_code == 0
 
 
-def test_app_check_err(tmp_path: Path):
+def test_app_check_err(tmp_path: Path) -> None:
     """Test of dependency file parser.
 
     Args:
@@ -157,7 +157,7 @@ coverage = 100
     assert result.exit_code == 1
 
 
-def test_app_check_fail_under(tmp_path: Path):
+def test_app_check_fail_under(tmp_path: Path) -> None:
     """Test of dependency file parser.
 
     Args:
@@ -206,5 +206,4 @@ coverage = 100"""
     result = runner.invoke(
         app, ["check", str(tmp_file), "--config-file", str(tmp_conf), "--develop"]
     )
-    print(result.stdout)
     assert result.exit_code == 2

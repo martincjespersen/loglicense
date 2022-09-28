@@ -24,7 +24,7 @@ def report(
     tablefmt: str = "pipe",
     develop: bool = False,
     output_file: Optional[str] = None,
-):
+) -> None:
     """Document licenses of packages in dependency file.
 
     Args:
@@ -63,7 +63,7 @@ def check(
     package_manager: str = "pypi",
     develop: bool = False,
     show_report: bool = True,
-):
+) -> None:
     """Check licenses of packages in dependency file.
 
     Args:
@@ -79,9 +79,9 @@ def check(
         ERR: finish code
         FAIL_UNDER: finish code
     """
-    config = configparser.ConfigParser()
-    config.read(config_file)
-    config = config["loglicense"]
+    cf = configparser.ConfigParser()
+    cf.read(config_file)
+    config = cf["loglicense"]
 
     license_log = LicenseLogger(
         dependency_file=dependency_file,

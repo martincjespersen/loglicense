@@ -38,7 +38,9 @@ from loglicense import LicenseLogger
     "packages",
     (["alabaster", "atomicwrites"],),
 )
-def test_dependency_file_parser(filename, content, packages, tmp_path) -> None:
+def test_dependency_file_parser(
+    filename: str, content: str, packages: List[str], tmp_path: Path
+) -> None:
     """Test of dependency file parser.
 
     Args:
@@ -102,7 +104,7 @@ def test_dependency_file_parser(filename, content, packages, tmp_path) -> None:
     ),
 )
 def test_license_logger_pypi(
-    filename: str, content: str, result: List[str], tmp_path: Path
+    filename: str, content: str, result: List[List[str]], tmp_path: Path
 ) -> None:
     """Test of license logger for pypi package manager.
 
@@ -117,14 +119,13 @@ def test_license_logger_pypi(
     tmp_path.write_text(content)
 
     license_log = LicenseLogger(
-        dependency_file=tmp_path,
+        dependency_file=str(tmp_path),
         package_manager="pypi",
         info_columns=["name", "license"],
         develop=True,
     )
     assert not license_log.is_logged()
     licenses = license_log.log_licenses()
-    print(licenses)
     assert license_log.is_logged()
     assert licenses == result
 
@@ -133,7 +134,7 @@ def test_license_logger_pypi(
     "filename",
     ("poetry.lock", ""),
 )
-def test_license_logger_file_err(filename, tmp_path: Path) -> None:
+def test_license_logger_file_err(filename: str, tmp_path: Path) -> None:
     """Test of license logger error handling.
 
     Args:
@@ -146,7 +147,7 @@ def test_license_logger_file_err(filename, tmp_path: Path) -> None:
 
     try:
         license_log = LicenseLogger(
-            dependency_file=tmp_path,
+            dependency_file=str(tmp_path),
             package_manager="pypi",
             info_columns=["name", "license"],
             develop=True,
@@ -161,7 +162,7 @@ def test_license_logger_file_err(filename, tmp_path: Path) -> None:
     "pkg_manager",
     ("pypi", "npm"),
 )
-def test_license_logger_file_not_implemented(pkg_manager, tmp_path: Path) -> None:
+def test_license_logger_file_not_implemented(pkg_manager: str, tmp_path: Path) -> None:
     """Test of license logger not implemented handling.
 
     Args:
@@ -172,7 +173,7 @@ def test_license_logger_file_not_implemented(pkg_manager, tmp_path: Path) -> Non
     tmp_path.touch(exist_ok=False)
     try:
         license_log = LicenseLogger(
-            dependency_file=tmp_path,
+            dependency_file=str(tmp_path),
             package_manager=pkg_manager,
             info_columns=["name", "license"],
             develop=True,

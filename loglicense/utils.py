@@ -9,7 +9,7 @@ import toml
 class DependencyFileParser:
     """Main module for DependencyFileParser."""
 
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__()
         self.method_prefix = "parse_"
         self.parsers = {
@@ -34,11 +34,11 @@ class DependencyFileParser:
         return dependency_filename
 
     @staticmethod
-    def parse_poetry_lock(license_file: Path, develop: bool = False) -> List[str]:
+    def parse_poetry_lock(license_path: Path, develop: bool = False) -> List[str]:
         """Main module for DependencyFileParser.
 
         Args:
-            license_file: Path to license file (poetry.lock)
+            license_path: Path to license file (poetry.lock)
             develop: Whether to include development dependencies
 
         Returns:
@@ -50,7 +50,7 @@ class DependencyFileParser:
         if develop:
             included_categories.add("dev")
 
-        license_file = toml.load(license_file)
+        license_file = toml.load(license_path)
         for pkg in license_file.get("package", []):
             if pkg["category"] in included_categories:
                 output.append(pkg.get("name", ""))
