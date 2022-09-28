@@ -1,0 +1,6 @@
+- id: loglicense
+  name: loglicense
+  description: Automatically checks and documents licenses of dependencies
+  entry: loglicense
+  language: python
+  types: [python]
