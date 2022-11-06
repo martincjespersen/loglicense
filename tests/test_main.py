@@ -49,9 +49,9 @@ def test_app_report(tmp_path: Path) -> None:
 | atomicwrites | MIT         |
 | SOMETGINF    | Not found   |"""
 
-    result = runner.invoke(app, ["report", str(tmp_path), "--develop"])
-    print(result.stdout)
-    print(output)
+    result = runner.invoke(
+        app, ["report", "--dependency-file", str(tmp_path), "--develop"]
+    )
     assert result.exit_code == 0
     assert output in result.stdout
 

@@ -1,5 +1,6 @@
 """Command-line interface."""
 import configparser
+import os
 from difflib import get_close_matches
 from pathlib import Path
 from typing import List
@@ -10,15 +11,35 @@ import typer
 from tabulate import tabulate
 
 from loglicense import LicenseLogger
+from loglicense.utils import DependencyFileParser
 
 
 app = typer.Typer()
 OK, ERR, FAIL_UNDER = typer.Exit(code=0), typer.Exit(code=1), typer.Exit(code=2)
 
 
+def search_dependency_file() -> str:
+    """Searches for supported files in current directory.
+
+    Returns:
+        str: First supported file found in directory
+
+    Raises:
+        Exception: Fails if no supported files found
+
+    """
+    supported_files = DependencyFileParser().parsers.keys()
+    files = os.listdir(".")
+    found_files = [x for x in files if x.lower() in supported_files]
+    if len(found_files) == 0:
+        raise Exception("No supported files found in current directory.")
+    dependency_file = found_files[0]
+    return dependency_file
+
+
 @app.command()
 def report(
-    dependency_file: str,
+    dependency_file: Optional[str] = None,
     package_manager: str = "pypi",
     info_columns: Optional[List[str]] = None,
     tablefmt: str = "pipe",
@@ -28,7 +49,8 @@ def report(
     """Document licenses of packages in dependency file.
 
     Args:
-        dependency_file: File to crawl dependencies for
+        dependency_file: Specify file to crawl dependencies for.
+            Defaults to search directory for supported files.
         package_manager: Which type of package manager to evaluate.
             Defaults to pypi for python.
         info_columns: Information to include in table to log
@@ -37,6 +59,9 @@ def report(
         output_file: File to save table of licenses in
     """
     info_columns = info_columns if info_columns else ["name", "license"]
+
+    if not dependency_file:
+        dependency_file = search_dependency_file()
 
     license_log = LicenseLogger(
         dependency_file=dependency_file,
@@ -75,13 +100,16 @@ def check(
         show_report: Print information regarding licences checked
 
     Raises:
-        OK: finish code
-        ERR: finish code
-        FAIL_UNDER: finish code
+        OK: 0 exit code
+        ERR: 1 exit code
+        FAIL_UNDER: 2 exit code
     """
     cf = configparser.ConfigParser()
     cf.read(config_file)
     config = cf["loglicense"]
+
+    if not dependency_file:
+        dependency_file = search_dependency_file()
 
     license_log = LicenseLogger(
         dependency_file=dependency_file,
