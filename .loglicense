@@ -1,8 +1,10 @@
 [loglicense]
-allow =
+allowed =
     MIT,
     BSD-3-Clause,
     BSD
-ban =
+banned =
     AGPL,
+validated =
+    click,
 coverage = 100

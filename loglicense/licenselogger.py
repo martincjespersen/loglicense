@@ -59,7 +59,7 @@ class LicenseLogger:
             List[List[str]]: Metadata from licenses found in dependency
             file.
         """
-        self.licenselog_ = [self.info_columns]
+        self.licenselog_ = [[x.capitalize() for x in self.info_columns]]
 
         for libname in self.parser(self.dependency_file, **self._parser_args):
             pkg_metadata = self.get_license_metadata(libname)

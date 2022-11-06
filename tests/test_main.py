@@ -43,7 +43,7 @@ def test_app_report(tmp_path: Path) -> None:
         """
     )
 
-    output = """| name         | license     |
+    output = """| Name         | License     |
 |:-------------|:------------|
 | alabaster    | BSD License |
 | atomicwrites | MIT         |
@@ -67,7 +67,7 @@ def test_app_check_ok(tmp_path: Path) -> None:
     tmp_conf.write_text(
         """
 [loglicense]
-ban =
+banned =
      AGPL,
 """
     )
@@ -117,7 +117,7 @@ def test_app_check_err(tmp_path: Path) -> None:
     tmp_conf.write_text(
         """
 [loglicense]
-ban =
+banned =
     MIT
 coverage = 100
 """
@@ -168,7 +168,7 @@ def test_app_check_fail_under(tmp_path: Path) -> None:
     tmp_conf.write_text(
         """
 [loglicense]
-allow =
+allowed =
     MIT,
     BSD-3-Clause,
     BSD

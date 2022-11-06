@@ -96,7 +96,7 @@ def test_dependency_file_parser(
     "result",
     (
         [
-            ["name", "license"],
+            ["Name", "License"],
             ["alabaster", "BSD License"],
             ["atomicwrites", "MIT"],
             ["SOMETGINF", "Not found"],

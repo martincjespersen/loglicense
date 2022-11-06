@@ -69,6 +69,7 @@ def report(
         info_columns=info_columns,
         develop=develop,
     )
+
     license_table = tabulate(
         license_log.log_licenses(), tablefmt=tablefmt, headers="firstrow"
     )
@@ -119,10 +120,15 @@ def check(
     )
 
     allowed = {
-        x.lower().strip() for x in config.get("allow", "").split(",") if x.strip()
+        x.lower().strip() for x in config.get("allowed", "").split(",") if x.strip()
     }
-    banned = {x.lower().strip() for x in config.get("ban", "").split(",") if x.strip()}
-    results = validate_requirements(license_log, allowed, banned)
+    banned = {
+        x.lower().strip() for x in config.get("banned", "").split(",") if x.strip()
+    }
+    validated = {
+        x.lower().strip() for x in config.get("validated", "").split(",") if x.strip()
+    }
+    results = validate_requirements(license_log, allowed, banned, validated)
 
     if show_report:
         print(f"Found {len(results)-1} dependencies")
@@ -154,7 +160,10 @@ def check(
 
 
 def validate_requirements(
-    license_logger: LicenseLogger, allowed: Set[str], banned: Set[str]
+    license_logger: LicenseLogger,
+    allowed: Set[str],
+    banned: Set[str],
+    validated: Set[str],
 ) -> List[List[str]]:
     """Compare licenses to requirements.
 
@@ -162,16 +171,22 @@ def validate_requirements(
         license_logger: File to crawl dependencies for
         allowed: Whether to include development dependencies
         banned: Print information regarding licences checked
+        validated: Manually validated packages
 
     Returns:
         List[List[str]]: Returns results of validation of license
     """
-    results = [["Name", "License", "Status"]]
-    for lib in license_logger.log_licenses()[1:]:
-
+    license_log = license_logger.log_licenses()
+    results = [license_log[0] + ["Status"]]
+    for lib in license_log[1:]:
         # handle multiple licenses
         for lib_license in lib[-1].split("\n"):
             matches = None
+            if lib[0] in validated:
+                results.append(
+                    [lib[0], lib[-1].replace("\n", ", "), "Manually validated"]
+                )
+                continue
             if banned:
                 matches = get_close_matches(
                     lib_license.lower().replace("license", ""), banned
