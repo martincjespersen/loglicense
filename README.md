@@ -72,6 +72,12 @@ Example output of this project's poetry.lock file:
 | zipp               | MIT License                        |
 ```
 
+Alternatively you can let it search the executed directory for any supported file
+
+```console
+$ loglicense report
+```
+
 ## Features to implement
 
 - Support npmjs package manager (and package.json/package-lock.json)
