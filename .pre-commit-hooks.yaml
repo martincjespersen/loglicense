@@ -1,7 +1,7 @@
 - id: loglicense
   name: loglicense
   description: Automatically checks and documents licenses of dependencies
-  entry: loglicense
+  entry: loglicense check
   language: python
   require_serial: true
   types: [text]
