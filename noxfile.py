@@ -173,7 +173,7 @@ def tests(session: Session) -> None:
 def coverage(session: Session) -> None:
     """Produce the coverage report."""
     args = session.posargs or ["report"]
-
+    args = args + ["-i"]
     session.install("coverage[toml]")
 
     if not session.posargs and any(Path().glob(".coverage.*")):

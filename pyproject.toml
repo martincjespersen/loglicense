@@ -40,9 +40,9 @@ mypy = ">=0.930"
 pep8-naming = ">=0.12.1"
 pre-commit = ">=2.16.0"
 pre-commit-hooks = ">=4.1.0"
-pytest = ">=6.2.5"
+pytest = ">=7.2.0"
 pyupgrade = ">=2.29.1"
-safety = ">=1.10.3"
+safety = ">=2.2.0"
 sphinx = ">=4.3.2"
 sphinx-autobuild = ">=2021.3.14"
 sphinx-click = ">=3.0.2"
@@ -63,7 +63,7 @@ source = ["loglicense", "tests"]
 
 [tool.coverage.report]
 show_missing = true
-fail_under = 90
+fail_under = 80
 
 [tool.isort]
 profile = "black"
