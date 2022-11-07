@@ -59,7 +59,7 @@ $ loglicense report path_to/poetry.lock
 Example output of this project's poetry.lock file:
 
 ```console
-| name               | license                            |
+| Name               | License                            |
 |:-------------------|:-----------------------------------|
 | click              | BSD-3-Clause                       |
 | colorama           | BSD                                |

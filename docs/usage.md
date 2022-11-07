@@ -15,7 +15,7 @@ $ loglicense report path_to/poetry.lock
 Example output of this project's poetry.lock file:
 
 ```
-| name               | license                            |
+| Name               | License                            |
 |:-------------------|:-----------------------------------|
 | click              | BSD-3-Clause                       |
 | colorama           | BSD                                |
@@ -62,20 +62,23 @@ Target license coverage (100%) and actual coverage: 77%
 
 The config has three parameters you can use:
 
-- **allow**: Explicitly list the licenses which you allow in your project
-- **ban**: Explicitly list the license which you ban from your project
+- **allowed**: Explicitly list the licenses which you allow in your project
+- **banned**: Explicitly list the license which you ban from your project
+- **validated**: Explicitly list the packages manually validated and accepted
 - **coverage**: The percentage of licenses which should be identfied and evaluated in your project. This is useful to catch unknown new licenses.
 
 #### Example of a config file (looks for .loglicense by default)
 
 ```
 [loglicense]
-allow =
+allowed =
     MIT,
     BSD-3-Clause,
     BSD
-ban =
+banned =
     AGPL,
+validated =
+    click,
 coverage = 100
 ```
 
