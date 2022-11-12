@@ -2,9 +2,11 @@
 allowed =
     MIT,
     BSD-3-Clause,
-    BSD
+    BSD,
+    Apache,
+    Expat,
 banned =
     AGPL,
 validated =
-    click,
+    furo,
 coverage = 100

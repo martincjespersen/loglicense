@@ -9,34 +9,61 @@ from loglicense import LicenseLogger
 
 
 @pytest.mark.parametrize(
-    "filename",
-    ("poetry.lock",),
-)
-@pytest.mark.parametrize(
-    "content",
-    (
-        """
-        [[package]]
-        name = "alabaster"
-        version = "0.7.12"
-        description = "A configurable sidebar-enabled Sphinx theme"
-        category = "dev"
-        optional = false
-        python-versions = "*"
+    "filename, content, packages",
+    [
+        (
+            "poetry.lock",
+            """[[package]]
+name = "alabaster"
+version = "0.7.12"
+description = "A configurable sidebar-enabled Sphinx theme"
+category = "dev"
+optional = false
+python-versions = "*"
 
-        [[package]]
-        name = "atomicwrites"
-        version = "1.4.0"
-        description = "Atomic file writes."
-        category = "dev"
-        optional = false
-        python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*"
+[[package]]
+name = "atomicwrites"
+version = "1.4.0"
+description = "Atomic file writes."
+category = "dev"
+optional = false
+python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*"
+""",
+            ["alabaster", "atomicwrites"],
+        ),
+        (
+            "requirements.txt",
+            """alabaster==0.7.12
+atomicwrites>=1.4.0
         """,
-    ),
-)
-@pytest.mark.parametrize(
-    "packages",
-    (["alabaster", "atomicwrites"],),
+            ["alabaster", "atomicwrites"],
+        ),
+        (
+            "pyproject.toml",
+            """[tool.poetry.dependencies]
+python = "^3.7"
+
+[tool.poetry.dev-dependencies]
+alabaster = "0.7.12"
+atomicwrites = "^1.4.0"
+
+""",
+            ["alabaster", "atomicwrites"],
+        ),
+        (
+            "pyproject.toml",
+            """[project]
+dependencies = []
+
+[project.optional-dependencies]
+test = [
+    "alabaster==0.20.4",
+    "atomicwrites >=1.6.2,!=1.7,!=1.7.1,!=1.7.2,!=1.7.3,!=1.8,!=1.8.1,<2.0.0",
+]
+""",
+            ["alabaster", "atomicwrites"],
+        ),
+    ],
 )
 def test_dependency_file_parser(
     filename: str, content: str, packages: List[str], tmp_path: Path
@@ -49,59 +76,55 @@ def test_dependency_file_parser(
         packages: Expected packages to find
         tmp_path: Path to temporary directory
     """
+    print(filename, content)
     tmp_path = tmp_path / filename
     tmp_path.touch(exist_ok=False)
     tmp_path.write_text(content)
 
     parser = DependencyFileParser().parsers
 
-    assert list(parser.keys())[0] == filename
+    assert filename in parser
     assert parser[filename](tmp_path, develop=True) == packages
-    assert parser[filename](tmp_path, develop=False) == []
+    if filename != "requirements.txt":
+        assert parser[filename](tmp_path, develop=False) == []
 
 
 @pytest.mark.parametrize(
-    "filename",
-    ("poetry.lock",),
-)
-@pytest.mark.parametrize(
-    "content",
-    (
-        """
-        [[package]]
-        name = "alabaster"
-        version = "0.7.12"
-        description = "A configurable sidebar-enabled Sphinx theme"
-        category = "dev"
-        optional = false
-        python-versions = "*"
+    "filename, content, result",
+    [
+        (
+            "poetry.lock",
+            """
+            [[package]]
+            name = "alabaster"
+            version = "0.7.12"
+            description = "A configurable sidebar-enabled Sphinx theme"
+            category = "dev"
+            optional = false
+            python-versions = "*"
 
-        [[package]]
-        name = "atomicwrites"
-        version = "1.4.0"
-        description = "Atomic file writes."
-        category = "dev"
-        optional = false
-        python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*"
+            [[package]]
+            name = "atomicwrites"
+            version = "1.4.0"
+            description = "Atomic file writes."
+            category = "dev"
+            optional = false
+            python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*"
 
-        [[package]]
-        name = "SOMETGINF"
-        version = "1.4.0"
-        description = "Atomic file writes."
-        category = "dev"
-        """,
-    ),
-)
-@pytest.mark.parametrize(
-    "result",
-    (
-        [
-            ["Name", "License"],
-            ["alabaster", "BSD License"],
-            ["atomicwrites", "MIT"],
-            ["SOMETGINF", "Not found"],
-        ],
-    ),
+            [[package]]
+            name = "SOMETGINF"
+            version = "1.4.0"
+            description = "Atomic file writes."
+            category = "dev"
+            """,
+            [
+                ["Name", "License"],
+                ["alabaster", "BSD License"],
+                ["atomicwrites", "MIT"],
+                ["SOMETGINF", "Not found"],
+            ],
+        )
+    ],
 )
 def test_license_logger_pypi(
     filename: str, content: str, result: List[List[str]], tmp_path: Path

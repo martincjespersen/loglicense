@@ -22,13 +22,23 @@
 [pre-commit]: https://github.com/pre-commit/pre-commit
 [black]: https://github.com/psf/black
 
+A tool for helping developers staying compliant within their software projects. The tool crawls dependencies and logs their licenses, allowing to document and restrict certain licenses within a software project.
+
+**DISCLAIMER**: There is no guarentee that all sublicenses or licenses will be identified and reported. For highest ensurance, use lock files to also catch sub-dependencies. However, this only looks within the given package manager, meaning C libraries an alike will not be reported here.
+
 ## Features
 
 - Report and save log of licenses included in project
+- Check coverage of packages supported accepted licenses
+- Supporting pre-commits with coverage thresholds and allowing manual validation of unknown license types
 
 ### Supported dependency files
 
+Though the tool supports multiple file types, it is **highly recommended** to use lock files or do a ´pip freeze > requirements.txt´ in order to ensure all sub-dependencies are also evaluated for their license.
+
 - poetry.lock
+- pyproject.toml (traditional and poetry)
+- requirements.txt (--develop adds search for requirements_dev.txt)
 
 ### Supported package managers
 
@@ -56,7 +66,7 @@ Please see the [Command-line Reference] for details.
 $ loglicense report path_to/poetry.lock
 ```
 
-Example output of this project's poetry.lock file:
+Example output:
 
 ```console
 | Name               | License                            |

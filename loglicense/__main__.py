@@ -84,11 +84,11 @@ def report(
 
 @app.command()
 def check(
-    dependency_file: str,
+    dependency_file: Optional[str] = None,
     config_file: str = ".loglicense",
     package_manager: str = "pypi",
     develop: bool = False,
-    show_report: bool = True,
+    show_report: bool = False,
 ) -> None:
     """Check licenses of packages in dependency file.
 
@@ -141,9 +141,10 @@ def check(
         raise ERR
 
     try:
-        license_coverage = int(
-            (result_status.count("Allowed") / len(result_status)) * 100
+        accepted = result_status.count("Allowed") + result_status.count(
+            "Manually validated"
         )
+        license_coverage = int((accepted / len(result_status)) * 100)
     except ZeroDivisionError:
         license_coverage = 100
 

@@ -101,7 +101,15 @@ banned =
     )
 
     result = runner.invoke(
-        app, ["check", str(tmp_file), "--config-file", str(tmp_conf), "--develop"]
+        app,
+        [
+            "check",
+            "--dependency-file",
+            str(tmp_file),
+            "--config-file",
+            str(tmp_conf),
+            "--develop",
+        ],
     )
     assert result.exit_code == 0
 
@@ -152,7 +160,15 @@ coverage = 100
     )
 
     result = runner.invoke(
-        app, ["check", str(tmp_file), "--config-file", str(tmp_conf), "--develop"]
+        app,
+        [
+            "check",
+            "--dependency-file",
+            str(tmp_file),
+            "--config-file",
+            str(tmp_conf),
+            "--develop",
+        ],
     )
     assert result.exit_code == 1
 
@@ -204,6 +220,14 @@ coverage = 100"""
     )
 
     result = runner.invoke(
-        app, ["check", str(tmp_file), "--config-file", str(tmp_conf), "--develop"]
+        app,
+        [
+            "check",
+            "--dependency-file",
+            str(tmp_file),
+            "--config-file",
+            str(tmp_conf),
+            "--develop",
+        ],
     )
     assert result.exit_code == 2
