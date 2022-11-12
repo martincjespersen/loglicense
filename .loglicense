@@ -5,8 +5,15 @@ allowed =
     BSD,
     Apache,
     Expat,
+    Python Software Foundation License,
+    MPL-2.0,
+    Python,
+    Apache Software,
 banned =
     AGPL,
 validated =
-    furo,
+    docutils,
+    restructuredtext-lint,
+    packaging,
+    filelock,
 coverage = 100

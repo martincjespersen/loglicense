@@ -89,6 +89,7 @@ def check(
     package_manager: str = "pypi",
     develop: bool = False,
     show_report: bool = False,
+    output_file: Optional[str] = None,
 ) -> None:
     """Check licenses of packages in dependency file.
 
@@ -99,6 +100,7 @@ def check(
             Defaults to pypi for python.
         develop: Whether to include development dependencies
         show_report: Print information regarding licences checked
+        output_file: File to save table of licenses in
 
     Raises:
         OK: 0 exit code
@@ -130,11 +132,6 @@ def check(
     }
     results = validate_requirements(license_log, allowed, banned, validated)
 
-    if show_report:
-        print(f"Found {len(results)-1} dependencies")
-        pretty_print = tabulate(results, tablefmt="pipe", headers="firstrow")
-        print(pretty_print)
-
     result_status = [x[-1] for x in results[1:]]
 
     if any([x == "Banned" for x in result_status]):
@@ -150,12 +147,27 @@ def check(
 
     if "coverage" in config:
         target_cov = int(config.get("coverage"))
-        print(
+        coverage_score = (
             f"Target license coverage ({target_cov}%) "
             f"and actual coverage: {license_coverage}%"
         )
-        if license_coverage < target_cov:
-            raise FAIL_UNDER
+
+    if show_report:
+        pretty_print = tabulate(results, tablefmt="pipe", headers="firstrow")
+
+    if output_file:
+        output_filepath = Path(output_file)
+        output_filepath.touch(exist_ok=True)
+        output_filepath.write_text(f"Found {len(results)-1} dependencies")
+        output_filepath.write_text(coverage_score)
+        output_filepath.write_text(pretty_print)
+    else:
+        print(f"Found {len(results)-1} dependencies")
+        print(coverage_score)
+        print(pretty_print)
+
+    if "coverage" in config and license_coverage < target_cov:
+        raise FAIL_UNDER
 
     raise OK
 

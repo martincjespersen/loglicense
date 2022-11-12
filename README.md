@@ -91,7 +91,7 @@ $ loglicense report
 ## Features to implement
 
 - Support npmjs package manager (and package.json/package-lock.json)
-- Support Pipfile, pyproject.toml, Pipfile.lock, requirements.txt
+- Support Pipfile, Pipfile.lock, conda.yaml, pip freeze
 
 ## Contributing
 

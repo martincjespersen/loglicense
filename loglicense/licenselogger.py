@@ -75,16 +75,20 @@ class LicenseLogger:
 
                     if not licenses:
                         licenses = ""
-                    if col == "license" and licenses.strip() == "":
+                    if col == "license":
                         classifiers = pkg_metadata.get("classifiers", "")
-                        licenses = [
+                        classifiers_licenses = [
                             classifier.replace("License :: ", "").replace(
                                 "OSI Approved :: ", ""
                             )
                             for classifier in classifiers
                             if classifier.startswith("License")
                         ]
-                        licenses = "\n".join(licenses)
+                        licenses__ = "\n".join(classifiers_licenses).strip()
+                        if licenses.strip() == "":
+                            licenses = licenses__
+                        elif len(licenses) > len(licenses__) and len(licenses__) != 0:
+                            licenses = licenses__
 
                     lib_metadata.append(licenses)
 
