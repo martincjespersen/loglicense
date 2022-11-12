@@ -152,8 +152,7 @@ def check(
             f"and actual coverage: {license_coverage}%"
         )
 
-    if show_report:
-        pretty_print = tabulate(results, tablefmt="pipe", headers="firstrow")
+    pretty_print = tabulate(results, tablefmt="pipe", headers="firstrow")
 
     if output_file:
         output_filepath = Path(output_file)
@@ -161,7 +160,7 @@ def check(
         output_filepath.write_text(f"Found {len(results)-1} dependencies")
         output_filepath.write_text(coverage_score)
         output_filepath.write_text(pretty_print)
-    else:
+    elif show_report:
         print(f"Found {len(results)-1} dependencies")
         print(coverage_score)
         print(pretty_print)
