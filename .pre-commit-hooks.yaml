@@ -3,5 +3,6 @@
   description: Automatically checks and documents licenses of dependencies
   entry: loglicense check
   language: python
+  pass_filenames: false
   require_serial: true
   types: [text]
