@@ -4,7 +4,7 @@ from pathlib import Path
 from typing import List
 from typing import Set
 
-import pkg_resources
+import pkg_resources  # type: ignore
 import toml
 
 

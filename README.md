@@ -24,7 +24,7 @@
 
 A tool for helping developers staying compliant within their software projects. The tool crawls dependencies and logs their licenses, allowing to document and restrict certain licenses within a software project.
 
-**DISCLAIMER**: There is no guarentee that all sublicenses or licenses will be identified and reported. For highest ensurance, use lock files to also catch sub-dependencies. However, this only looks within the given package manager, meaning C libraries an alike will not be reported here.
+**DISCLAIMER**: _There is no guarentee that all sublicenses or licenses will be identified and reported. For highest ensurance, use lock files to also catch sub-dependencies. However, this only looks within the given package manager, meaning C libraries and alike will not be reported here._
 
 ## Features
 
