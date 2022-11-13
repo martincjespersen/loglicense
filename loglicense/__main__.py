@@ -157,9 +157,9 @@ def check(
     if output_file:
         output_filepath = Path(output_file)
         output_filepath.touch(exist_ok=True)
-        output_filepath.write_text(f"Found {len(results)-1} dependencies")
-        output_filepath.write_text(coverage_score)
-        output_filepath.write_text(pretty_print)
+        output_string = "\n".join([coverage_score, "", pretty_print])
+
+        output_filepath.write_text(output_string)
     elif show_report:
         print(f"Found {len(results)-1} dependencies")
         print(coverage_score)
