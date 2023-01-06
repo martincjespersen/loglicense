@@ -30,6 +30,7 @@ typer = "^0.6.1"
 toml = "^0.10.2"
 types-tabulate = "^0.8.11"
 types-toml = "^0.10.8"
+gitpython = "^3.1.30"
 
 [tool.poetry.dev-dependencies]
 Pygments = ">=2.10.0"

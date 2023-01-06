@@ -63,9 +63,10 @@ class LicenseLogger:
 
         for libname in self.parser(self.dependency_file, **self._parser_args):
             pkg_metadata = self.get_license_metadata(libname)
+            libname_ = libname.split("/")[0]
             lib_metadata = []
             if not pkg_metadata:
-                lib_metadata.append(libname)
+                lib_metadata.append(libname_)
                 lib_metadata.extend(
                     ["Not found" for x in range(len(self.info_columns) - 1)]
                 )

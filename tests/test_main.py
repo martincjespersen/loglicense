@@ -52,6 +52,7 @@ def test_app_report(tmp_path: Path) -> None:
     result = runner.invoke(
         app, ["report", "--dependency-file", str(tmp_path), "--develop"]
     )
+
     assert result.exit_code == 0
     assert output in result.stdout
 
