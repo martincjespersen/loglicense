@@ -58,13 +58,13 @@ jobs:
 
       - name: Install Poetry
         run: |
-          pip install --constraint=.github/workflows/constraints.txt poetry --python=${{ matrix.python }}
+          pip install --constraint=.github/workflows/constraints.txt poetry
           poetry --version
 
       - name: Install Nox
         run: |
-          pip install --constraint=.github/workflows/constraints.txt nox --python=${{ matrix.python }}
-          pip inject --constraint=.github/workflows/constraints.txt nox nox-poetry --python=${{ matrix.python }}
+          pip install --constraint=.github/workflows/constraints.txt nox
+          pip inject --constraint=.github/workflows/constraints.txt nox nox-poetry
           nox --version
 
       - name: Compute pre-commit cache key
@@ -93,7 +93,7 @@ jobs:
 
       - name: Run Nox
         run: |
-          nox --python=${{ matrix.python }}
+          nox
 
       - name: Upload coverage data
         if: always() && matrix.session == 'tests'
