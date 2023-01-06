@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "loglicense"
-version = "0.1.5"
+version = "0.1.6"
 description = "Log License"
 authors = ["Martin Closter Jespersen <martincjespersen@gmail.com>"]
 license = "Apache-2.0"
