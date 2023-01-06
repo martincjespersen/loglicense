@@ -58,13 +58,13 @@ jobs:
 
       - name: Install Poetry
         run: |
-          pipx install --pip-args=--constraint=.github/workflows/constraints.txt poetry --python=${{ matrix.python }}
+          pip install --constraint=.github/workflows/constraints.txt poetry --python=${{ matrix.python }}
           poetry --version
 
       - name: Install Nox
         run: |
-          pipx install --pip-args=--constraint=.github/workflows/constraints.txt nox --python=${{ matrix.python }}
-          pipx inject --pip-args=--constraint=.github/workflows/constraints.txt nox nox-poetry --python=${{ matrix.python }}
+          pip install --constraint=.github/workflows/constraints.txt nox --python=${{ matrix.python }}
+          pip inject --constraint=.github/workflows/constraints.txt nox nox-poetry --python=${{ matrix.python }}
           nox --version
 
       - name: Compute pre-commit cache key
@@ -128,13 +128,13 @@ jobs:
 
       - name: Install Poetry
         run: |
-          pipx install --pip-args=--constraint=.github/workflows/constraints.txt poetry --python=${{ matrix.python }}
+          pip install --constraint=.github/workflows/constraints.txt poetry
           poetry --version
 
       - name: Install Nox
         run: |
-          pipx install --pip-args=--constraint=.github/workflows/constraints.txt nox --python=${{ matrix.python }}
-          pipx inject --pip-args=--constraint=.github/workflows/constraints.txt nox nox-poetry --python=${{ matrix.python }}
+          pip install --constraint=.github/workflows/constraints.txt nox
+          pip inject --constraint=.github/workflows/constraints.txt nox nox-poetry
           nox --version
 
       - name: Download coverage data
