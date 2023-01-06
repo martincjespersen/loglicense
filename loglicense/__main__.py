@@ -41,7 +41,7 @@ def search_dependency_file() -> str:
 def report(
     dependency_file: Optional[str] = None,
     package_manager: str = "pypi",
-    info_columns: Optional[List[str]] = None,
+    info_columns: Optional[str] = None,
     tablefmt: str = "pipe",
     develop: bool = False,
     output_file: Optional[str] = None,
@@ -58,7 +58,9 @@ def report(
         develop: Whether to include development dependencies
         output_file: File to save table of licenses in
     """
-    info_columns = info_columns if info_columns else ["name", "license"]
+    information_columns = (
+        info_columns.split(",") if info_columns else ["name", "license"]
+    )
 
     if not dependency_file:
         dependency_file = search_dependency_file()
@@ -66,7 +68,7 @@ def report(
     license_log = LicenseLogger(
         dependency_file=dependency_file,
         package_manager=package_manager,
-        info_columns=info_columns,
+        info_columns=information_columns,
         develop=develop,
     )
 
@@ -117,7 +119,7 @@ def check(
     license_log = LicenseLogger(
         dependency_file=dependency_file,
         package_manager=package_manager,
-        info_columns=["name", "license"],
+        info_columns=["name", "version", "license"],
         develop=develop,
     )
 
@@ -133,6 +135,7 @@ def check(
     results = validate_requirements(license_log, allowed, banned, validated)
 
     result_status = [x[-1] for x in results[1:]]
+    print(results)
 
     if any([x == "Banned" for x in result_status]):
         raise ERR
@@ -194,17 +197,19 @@ def validate_requirements(
         # handle multiple licenses
         for lib_license in lib[-1].split("\n"):
             matches = None
+            row_info = [
+                lib_license if key.lower() == "license" else val
+                for val, key in zip(lib, license_log[0])
+            ]
             if lib[0] in validated:
-                results.append(
-                    [lib[0], lib[-1].replace("\n", ", "), "Manually validated"]
-                )
+                results.append(row_info + ["Manually validated"])
                 continue
             if banned:
                 matches = get_close_matches(
                     lib_license.lower().replace("license", ""), banned
                 )
                 if matches:
-                    results.append([lib[0], lib_license, "Banned"])
+                    results.append(row_info + ["Banned"])
                     continue
 
             if allowed:
@@ -212,14 +217,14 @@ def validate_requirements(
                     lib_license.lower().replace("license", ""), allowed
                 )
                 if matches:
-                    results.append([lib[0], lib_license, "Allowed"])
+                    results.append(row_info + ["Allowed"])
 
                 if not matches:
-                    results.append([lib[0], lib_license, "Unknown"])
+                    results.append(row_info + ["Unknown"])
 
             else:
                 if not matches:
-                    results.append([lib[0], lib_license, "Allowed"])
+                    results.append(row_info + ["Allowed"])
 
     return results
 

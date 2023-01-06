@@ -29,7 +29,7 @@ category = "dev"
 optional = false
 python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*"
 """,
-            ["alabaster", "atomicwrites"],
+            ["alabaster/0.7.12", "atomicwrites/1.4.0"],
         ),
         (
             "requirements.txt",
@@ -76,7 +76,6 @@ def test_dependency_file_parser(
         packages: Expected packages to find
         tmp_path: Path to temporary directory
     """
-    print(filename, content)
     tmp_path = tmp_path / filename
     tmp_path.touch(exist_ok=False)
     tmp_path.write_text(content)

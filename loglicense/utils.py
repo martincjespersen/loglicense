@@ -55,7 +55,8 @@ class DependencyFileParser:
         license_file = toml.load(license_path)
         for pkg in license_file.get("package", []):
             if pkg["category"] in included_categories:
-                output.append(pkg.get("name", ""))
+                version = pkg.get("version", "")
+                output.append(pkg.get("name", "") + f"/{version}")
         return output
 
     @staticmethod
