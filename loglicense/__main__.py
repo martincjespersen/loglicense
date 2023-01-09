@@ -135,7 +135,6 @@ def check(
     results = validate_requirements(license_log, allowed, banned, validated)
 
     result_status = [x[-1] for x in results[1:]]
-    print(results)
 
     if any([x == "Banned" for x in result_status]):
         raise ERR

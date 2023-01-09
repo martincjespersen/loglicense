@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "loglicense"
-version = "0.1.6"
+version = "0.1.7"
 description = "Log License"
 authors = ["Martin Closter Jespersen <martincjespersen@gmail.com>"]
 license = "Apache-2.0"
@@ -31,6 +31,7 @@ toml = "^0.10.2"
 types-tabulate = "^0.8.11"
 types-toml = "^0.10.8"
 gitpython = "^3.1.30"
+certifi = "^2022.12.07"
 
 [tool.poetry.dev-dependencies]
 Pygments = ">=2.10.0"
