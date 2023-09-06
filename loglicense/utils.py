@@ -57,7 +57,6 @@ class DependencyFileParser:
             if not pkg.get("category") or pkg.get("category","") in included_categories:
                 version = pkg.get("version", "")
                 output.append(pkg.get("name", "") + f"/{version}")
-
         return output
 
     @staticmethod
