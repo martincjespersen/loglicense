@@ -23,7 +23,7 @@ classifiers = [
 Changelog = "https://github.com/martincjespersen/loglicense/releases"
 
 [tool.poetry.dependencies]
-python = "^3.8"
+python = "^3.10"
 pathlib = "^1.0.1"
 tabulate = "^0.8.10"
 typer = "^0.6.1"
@@ -35,6 +35,7 @@ certifi = "^2023.07.22"
 nox = "^2023.4.22"
 tornado="^6.3.2"
 nox-poetry = "^1.0.3"
+setuptools = "<82"
 
 [tool.poetry.dev-dependencies]
 Pygments = ">=2.10.0"

@@ -23,7 +23,7 @@ except ImportError:
 
 
 package = "loglicense"
-python_versions = ["3.10", "3.9", "3.8"]
+python_versions = ["3.10", "3.11", "3.12"]
 nox.needs_version = ">= 2021.6.6"
 nox.options.sessions = (
     "pre-commit",
@@ -141,9 +141,10 @@ def precommit(session: Session) -> None:
 @session(python=python_versions[0])
 def safety(session: Session) -> None:
     """Scan dependencies for insecure packages."""
-    requirements = session.poetry.export_requirements()
+    # Poetry 2.x moved export to a plugin, so we install dependencies directly
+    session.install(".")
     session.install("safety")
-    session.run("safety", "check", "--full-report", f"--file={requirements}")
+    session.run("safety", "check", "--full-report")
 
 
 @session(python=python_versions)
