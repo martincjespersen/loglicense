@@ -139,3 +139,47 @@ class DependencyFileParser:
             ]
 
         return output
+
+    @staticmethod
+    def parse_uv_lock(license_path: Path, develop: bool = False) -> List[str]:
+        """Parser for uv.lock files.
+
+        Args:
+            license_path: Path to license file (uv.lock)
+            develop: Whether to include development dependencies
+
+        Returns:
+            List[str]: List of the names of python dependencies in uv.lock file
+        """
+        output: List[str] = []
+        included_groups: Set[str] = {"main", "default"}
+
+        if develop:
+            included_groups.update({"dev", "development", "test"})
+
+        license_file = toml.load(license_path)
+        
+        for pkg in license_file.get("package", []):
+            # Get package name and version
+            name = pkg.get("name", "")
+            version = pkg.get("version", "")
+            
+            # Skip if no name
+            if not name:
+                continue
+            
+            # Check if package should be included based on groups
+            # If no groups specified, include by default
+            pkg_groups = pkg.get("groups", [])
+            if not pkg_groups:
+                # No groups specified means it's a default/main dependency
+                output.append(f"{name}/{version}" if version else name)
+            elif develop:
+                # Include all packages if develop flag is set
+                output.append(f"{name}/{version}" if version else name)
+            else:
+                # Check if package is in included groups
+                if any(group in included_groups for group in pkg_groups):
+                    output.append(f"{name}/{version}" if version else name)
+        
+        return output

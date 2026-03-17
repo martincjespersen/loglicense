@@ -63,6 +63,25 @@ test = [
 """,
             ["alabaster", "atomicwrites"],
         ),
+        (
+            "uv.lock",
+            """version = 1
+requires-python = ">=3.8"
+
+[[package]]
+name = "alabaster"
+version = "0.7.12"
+source = { registry = "https://pypi.org/simple" }
+groups = ["dev"]
+
+[[package]]
+name = "atomicwrites"
+version = "1.4.0"
+source = { registry = "https://pypi.org/simple" }
+groups = ["dev"]
+""",
+            ["alabaster/0.7.12", "atomicwrites/1.4.0"],
+        ),
     ],
 )
 def test_dependency_file_parser(
