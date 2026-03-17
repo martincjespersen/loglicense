@@ -28,6 +28,7 @@ jobs:
       NOXSESSION: ${{ matrix.session }}
       FORCE_COLOR: "1"
       PRE_COMMIT_COLOR: "always"
+      FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
 
     steps:
       - name: Check out the repository
@@ -109,6 +110,8 @@ jobs:
   coverage:
     runs-on: ubuntu-latest
     needs: tests
+    env:
+      FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
     steps:
       - name: Check out the repository
         uses: actions/checkout@v4
