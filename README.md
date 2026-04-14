@@ -34,7 +34,7 @@ A tool for helping developers staying compliant within their software projects. 
 
 ### Supported dependency files
 
-Though the tool supports multiple file types, it is **highly recommended** to use lock files or do a ´pip freeze > requirements.txt´ in order to ensure all sub-dependencies are also evaluated for their license.
+Though the tool supports multiple file types, it is **highly recommended** to use lock files or do a ´pip freeze > requirements.txt´ in order to ensure all sub-dependencies are also evaluated for their license. 
 
 - poetry.lock
 - uv.lock
