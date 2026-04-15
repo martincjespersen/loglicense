@@ -86,14 +86,16 @@ class LicenseLogger:
                             if classifier.startswith("License")
                         ]
                         licenses__ = "\n".join(classifiers_licenses).strip()
-                        if licenses.strip() == "":
+                        licenses_exp = pkg_metadata.get("license_expression", "") if pkg_metadata.get("license_expression", "")  else ""
+                        licenses_exp = "\n".join(licenses_exp.split(" AND "))
+                        
+                        if licenses_exp: 
+                            licenses = licenses_exp
+                        elif licenses.strip() == "":
                             licenses = licenses__
                         elif len(licenses) > len(licenses__) and len(licenses__) != 0:
                             licenses = licenses__
                     
-                    if not licenses:
-                        licenses = "\n".join(pkg_metadata.get("license_expression", "").split(" AND "))
-
                     lib_metadata.append(licenses)
 
             self.licenselog_.append(lib_metadata)
