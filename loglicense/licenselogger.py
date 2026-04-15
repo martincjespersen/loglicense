@@ -90,6 +90,9 @@ class LicenseLogger:
                             licenses = licenses__
                         elif len(licenses) > len(licenses__) and len(licenses__) != 0:
                             licenses = licenses__
+                    
+                    if not licenses:
+                        licenses = "\n".join(pkg_metadata.get("license_expression", "").split(" AND "))
 
                     lib_metadata.append(licenses)
 
