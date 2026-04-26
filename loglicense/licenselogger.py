@@ -41,7 +41,12 @@ class LicenseLogger:
         if not self.dependency_file.is_file():
             raise ValueError("Path must be a file")
 
-        self.parser = DependencyFileParser().parsers[self.dependency_file.name]
+        parser = DependencyFileParser().resolve(self.dependency_file.name)
+        if parser is None:
+            raise ValueError(
+                f"Unsupported lock file: {self.dependency_file.name}"
+            )
+        self.parser = parser
 
         if self.package_manager == "pypi":
             self.library_url = "https://pypi.python.org/pypi/XXX/json"
@@ -86,7 +91,7 @@ class LicenseLogger:
                             if classifier.startswith("License")
                         ]
                         licenses__ = "\n".join(classifiers_licenses).strip()
-                        licenses_exp = pkg_metadata.get("license_expression", "") if pkg_metadata.get("license_expression", "")  else ""
+                        licenses_exp = pkg_metadata.get("license_expression") or ""
                         licenses_exp = "\n".join(licenses_exp.split(" AND "))
                         
                         if licenses_exp: 

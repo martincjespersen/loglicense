@@ -8,8 +8,58 @@ from loglicense import DependencyFileParser
 from loglicense import LicenseLogger
 
 
+UV_LOCK_FIXTURE = """version = 1
+requires-python = ">=3.10"
+
+[[package]]
+name = "demo-project"
+version = "0.1.0"
+source = { editable = "." }
+dependencies = [
+    { name = "typer" },
+]
+
+[package.dev-dependencies]
+dev = [
+    { name = "pytest" },
+    { name = "black" },
+]
+
+[[package]]
+name = "typer"
+version = "0.12.0"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "click" },
+]
+
+[[package]]
+name = "click"
+version = "8.1.7"
+source = { registry = "https://pypi.org/simple" }
+
+[[package]]
+name = "pytest"
+version = "8.0.0"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "iniconfig" },
+]
+
+[[package]]
+name = "iniconfig"
+version = "2.0.0"
+source = { registry = "https://pypi.org/simple" }
+
+[[package]]
+name = "black"
+version = "24.3.0"
+source = { registry = "https://pypi.org/simple" }
+"""
+
+
 @pytest.mark.parametrize(
-    "filename, content, packages",
+    "filename, content, packages_develop, packages_main",
     [
         (
             "poetry.lock",
@@ -30,12 +80,14 @@ optional = false
 python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*"
 """,
             ["alabaster/0.7.12", "atomicwrites/1.4.0"],
+            [],
         ),
         (
             "requirements.txt",
             """alabaster==0.7.12
 atomicwrites>=1.4.0
         """,
+            ["alabaster", "atomicwrites"],
             ["alabaster", "atomicwrites"],
         ),
         (
@@ -49,6 +101,7 @@ atomicwrites = "^1.4.0"
 
 """,
             ["alabaster", "atomicwrites"],
+            [],
         ),
         (
             "pyproject.toml",
@@ -62,37 +115,36 @@ test = [
 ]
 """,
             ["alabaster", "atomicwrites"],
+            [],
         ),
         (
             "uv.lock",
-            """version = 1
-requires-python = ">=3.8"
-
-[[package]]
-name = "alabaster"
-version = "0.7.12"
-source = { registry = "https://pypi.org/simple" }
-groups = ["dev"]
-
-[[package]]
-name = "atomicwrites"
-version = "1.4.0"
-source = { registry = "https://pypi.org/simple" }
-groups = ["dev"]
-""",
-            ["alabaster/0.7.12", "atomicwrites/1.4.0"],
+            UV_LOCK_FIXTURE,
+            [
+                "typer/0.12.0",
+                "click/8.1.7",
+                "pytest/8.0.0",
+                "iniconfig/2.0.0",
+                "black/24.3.0",
+            ],
+            ["typer/0.12.0", "click/8.1.7"],
         ),
     ],
 )
 def test_dependency_file_parser(
-    filename: str, content: str, packages: List[str], tmp_path: Path
+    filename: str,
+    content: str,
+    packages_develop: List[str],
+    packages_main: List[str],
+    tmp_path: Path,
 ) -> None:
     """Test of dependency file parser.
 
     Args:
         filename: Filename to build and test
         content: Content of file to test
-        packages: Expected packages to find
+        packages_develop: Expected packages with develop=True
+        packages_main: Expected packages with develop=False
         tmp_path: Path to temporary directory
     """
     tmp_path = tmp_path / filename
@@ -102,9 +154,20 @@ def test_dependency_file_parser(
     parser = DependencyFileParser().parsers
 
     assert filename in parser
-    assert parser[filename](tmp_path, develop=True) == packages
-    if filename != "requirements.txt":
-        assert parser[filename](tmp_path, develop=False) == []
+    assert parser[filename](tmp_path, develop=True) == packages_develop
+    assert parser[filename](tmp_path, develop=False) == packages_main
+
+
+def test_dependency_file_parser_resolves_uv_alias(tmp_path: Path) -> None:
+    """Non-canonical uv lock filenames should still route to the uv parser."""
+    lock_path = tmp_path / "uv-test.lock"
+    lock_path.write_text(UV_LOCK_FIXTURE)
+
+    resolver = DependencyFileParser()
+    parser = resolver.resolve(lock_path.name)
+
+    assert parser is not None
+    assert parser(lock_path, develop=False) == ["typer/0.12.0", "click/8.1.7"]
 
 
 @pytest.mark.parametrize(

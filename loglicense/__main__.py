@@ -28,9 +28,9 @@ def search_dependency_file() -> str:
         Exception: Fails if no supported files found
 
     """
-    supported_files = DependencyFileParser().parsers.keys()
+    parser = DependencyFileParser()
     files = os.listdir(".")
-    found_files = [x for x in files if x.lower() in supported_files]
+    found_files = [x for x in files if parser.resolve(x.lower()) is not None]
     if len(found_files) == 0:
         raise Exception("No supported files found in current directory.")
     dependency_file = found_files[0]
